@@ -29,6 +29,8 @@
       var listItem = document.createElement('li');
       listItem.appendChild(document.createTextNode(JSON.stringify(data)));
       messageList.appendChild(listItem);
+
+      console.log(data)
     });
   </script>
 </body>
