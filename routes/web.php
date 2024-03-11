@@ -51,6 +51,13 @@ Route::post('/webhook', function (Request $request) use ($token) {
     // Parse the request body from the POST
     $body = $request->all();
 
+    // Trigger Pusher event
+    $pusher = new Pusher(env('PUSHER_APP_KEY'), env('PUSHER_APP_SECRET'), env('PUSHER_APP_ID'), [
+        'cluster' => env('PUSHER_APP_CLUSTER'),
+        'useTLS' => true
+    ]);
+    $pusher->trigger('whatsapp-events', 'message-received', ['message' => $body]);
+
     // Check the Incoming webhook message
     info(json_encode($request->all(), JSON_PRETTY_PRINT));
 
@@ -73,11 +80,11 @@ Route::post('/webhook', function (Request $request) use ($token) {
             ]);
 
             // Trigger Pusher event
-            $pusher = new Pusher(env('PUSHER_APP_KEY'), env('PUSHER_APP_SECRET'), env('PUSHER_APP_ID'), [
-                'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => true
-            ]);
-            $pusher->trigger('whatsapp-events', 'message-received', ['message' => "Ack: {$msgBody}"]);
+            // $pusher = new Pusher(env('PUSHER_APP_KEY'), env('PUSHER_APP_SECRET'), env('PUSHER_APP_ID'), [
+            //     'cluster' => env('PUSHER_APP_CLUSTER'),
+            //     'useTLS' => true
+            // ]);
+            // $pusher->trigger('whatsapp-events', 'message-received', ['message' => "Ack: {$msgBody}"]);
         }
         return response()->json([], 200);
     } else {
