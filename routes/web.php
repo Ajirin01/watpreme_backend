@@ -51,6 +51,8 @@ Route::post('/webhook', function (Request $request) use ($token) {
     // Parse the request body from the POST
     $body = $request->all();
 
+    App\Models\WebhookData::create(['data'=> $body]);
+
     // Trigger Pusher event
     $pusher = new Pusher(env('PUSHER_APP_KEY'), env('PUSHER_APP_SECRET'), env('PUSHER_APP_ID'), [
         'cluster' => env('PUSHER_APP_CLUSTER'),
