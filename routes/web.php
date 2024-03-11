@@ -86,6 +86,10 @@ Route::post('/webhook', function (Request $request) use ($token) {
     }
 });
 
+Route::get('/webhook_log', function(){
+    return view('webhook_log');
+});
+
 // Accepts GET requests at the /webhook endpoint. You need this URL to setup webhook initially.
 // info on verification request payload: https://developers.facebook.com/docs/graph-api/webhooks/getting-started#verification-requests 
 Route::get('/webhook', function (Request $request) {
