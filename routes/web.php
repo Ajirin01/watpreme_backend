@@ -96,7 +96,8 @@ Route::post('/webhook', function (Request $request) use ($token) {
 });
 
 Route::get('/webhook_log', function(){
-    return view('webhook_log');
+    $data = App\Models\WebhookData::all();
+    return view('webhook_log', ['data'=> $data]);
 });
 
 // Accepts GET requests at the /webhook endpoint. You need this URL to setup webhook initially.

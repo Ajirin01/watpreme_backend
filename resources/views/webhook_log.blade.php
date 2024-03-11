@@ -9,6 +9,7 @@
     with event name <code>my-event</code>; it will appear below:
   </p>
   <div id="app">
+    <div>{{ json_encode($data) }}</div>
     <ul id="messages-list">
     </ul>
   </div>
