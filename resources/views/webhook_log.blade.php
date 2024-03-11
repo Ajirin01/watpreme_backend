@@ -9,34 +9,26 @@
     with event name <code>my-event</code>; it will appear below:
   </p>
   <div id="app">
-    <ul>
-      <li v-for="message in messages">
-        {{message}}
-      </li>
+    <ul id="messages-list">
     </ul>
   </div>
 
-  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
   <script>
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
 
-    var pusher = new Pusher('8c7fd270f7eb75c0f6e1', {
-      cluster: 'eu'
+    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+      cluster: '{{ env('PUSHER_APP_CLUSTER') }}',
+      encrypted: true
     });
 
     var channel = pusher.subscribe('whatsapp-events');
     channel.bind('message-received', function(data) {
-      app.messages.push(JSON.stringify(data));
-    });
-
-    // Vue application
-    const app = new Vue({
-      el: '#app',
-      data: {
-        messages: [],
-      },
+      var messageList = document.getElementById('messages-list');
+      var listItem = document.createElement('li');
+      listItem.appendChild(document.createTextNode(JSON.stringify(data)));
+      messageList.appendChild(listItem);
     });
   </script>
 </body>
