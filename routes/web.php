@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Pusher\Pusher;
 
+use Illuminate\Support\Facades\DB;
+
+
 // Access token for your app
 // (copy token from DevX getting started page
 // and save it as environment variable into the .env file)
@@ -51,7 +54,9 @@ Route::post('/webhook', function (Request $request) use ($token) {
     // Parse the request body from the POST
     $body = $request->all();
 
-    App\Models\WebhookData::create(['data'=> $body]);
+    // App\Models\WebhookData::create(['data'=> $body]);
+
+    DB::table('webhook_datas')->insert(['data' => $body]);
 
     // Trigger Pusher event
     $pusher = new Pusher(env('PUSHER_APP_KEY'), env('PUSHER_APP_SECRET'), env('PUSHER_APP_ID'), [
@@ -96,7 +101,8 @@ Route::post('/webhook', function (Request $request) use ($token) {
 });
 
 Route::get('/webhook_log', function(){
-    $data = App\Models\WebhookData::all();
+    // $data = App\Models\WebhookData::all();
+    $data = DB::table('webhook_datas')->get();
     return view('webhook_log', ['data'=> $data]);
 });
 
