@@ -2,137 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use Pusher\Pusher;
-
-use Illuminate\Support\Facades\DB;
 
 
-// Access token for your app
-// (copy token from DevX getting started page
-// and save it as environment variable into the .env file)
-// $token = env('WHATSAPP_TOKEN');
+Route::post('/webhook', [App\Http\Controllers\WebhookController::class, 'webhookPost']);
 
-// $token = "ajirin";
-$token = env('WHATSAPP_TOKEN');
+Route::get('/webhook', [App\Http\Controllers\WebhookController::class, 'webhookGet']);
 
-// Sets server port and logs message on success
-// Route::post('/webhook', function (Request $request) use ($token) {
-//     // Parse the request body from the POST
-//     $body = $request->all();
-
-//     // Check the Incoming webhook message
-//     info(json_encode($request->all(), JSON_PRETTY_PRINT));
-
-//     // info on WhatsApp text message payload: https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
-//     if ($request->has('object')) {
-//         $entry = $request->input('entry.0');
-//         if (
-//             isset($entry['changes']) &&
-//             isset($entry['changes'][0]['value']['messages'][0])
-//         ) {
-//             $phoneNumberId = $entry['changes'][0]['value']['metadata']['phone_number_id'];
-//             $from = $entry['changes'][0]['value']['messages'][0]['from'];
-//             $msgBody = $entry['changes'][0]['value']['messages'][0]['text']['body'];
-
-//             // Send message
-//             Http::post("https://graph.facebook.com/v12.0/{$phoneNumberId}/messages?access_token={$token}", [
-//                 'messaging_product' => 'whatsapp',
-//                 'to' => $from,
-//                 'text' => ['body' => "Ack: {$msgBody}"]
-//             ]);
-//         }
-//         return response()->json([], 200);
-//     } else {
-//         // Return a '404 Not Found' if event is not from a WhatsApp API
-//         return response()->json(['error' => 'Not Found'], 404);
-//     }
-// });
-
-Route::post('/webhook', function (Request $request) use ($token) {
-    // Parse the request body from the POST
-    $body = $request->all();
-
-    // App\Models\WebhookData::create(['data'=> $body]);
-
-    DB::table('webhook_datas')->insert(['data' => $body]);
-
-    // Trigger Pusher event
-    $pusher = new Pusher(env('PUSHER_APP_KEY'), env('PUSHER_APP_SECRET'), env('PUSHER_APP_ID'), [
-        'cluster' => env('PUSHER_APP_CLUSTER'),
-        'useTLS' => true
-    ]);
-    $pusher->trigger('whatsapp-events', 'message-received', ['message' => $body]);
-
-    // Check the Incoming webhook message
-    info(json_encode($request->all(), JSON_PRETTY_PRINT));
-
-    // info on WhatsApp text message payload: https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
-    if ($request->has('object')) {
-        $entry = $request->input('entry.0');
-        if (
-            isset($entry['changes']) &&
-            isset($entry['changes'][0]['value']['messages'][0])
-        ) {
-            $phoneNumberId = $entry['changes'][0]['value']['metadata']['phone_number_id'];
-            $from = $entry['changes'][0]['value']['messages'][0]['from'];
-            $msgBody = $entry['changes'][0]['value']['messages'][0]['text']['body'];
-
-            // Send message
-            Http::post("https://graph.facebook.com/v12.0/{$phoneNumberId}/messages?access_token={$token}", [
-                'messaging_product' => 'whatsapp',
-                'to' => $from,
-                'text' => ['body' => "Ack: {$msgBody}"]
-            ]);
-
-            // Trigger Pusher event
-            // $pusher = new Pusher(env('PUSHER_APP_KEY'), env('PUSHER_APP_SECRET'), env('PUSHER_APP_ID'), [
-            //     'cluster' => env('PUSHER_APP_CLUSTER'),
-            //     'useTLS' => true
-            // ]);
-            // $pusher->trigger('whatsapp-events', 'message-received', ['message' => "Ack: {$msgBody}"]);
-        }
-        return response()->json([], 200);
-    } else {
-        // Return a '404 Not Found' if event is not from a WhatsApp API
-        return response()->json(['error' => 'Not Found'], 404);
-    }
-});
 
 Route::get('/webhook_log', function(){
-    // $data = App\Models\WebhookData::all();
-    $data = DB::table('webhook_datas')->get();
-    return view('webhook_log', ['data'=> $data]);
+    return view('webhook_log');
 });
 
-// Accepts GET requests at the /webhook endpoint. You need this URL to setup webhook initially.
-// info on verification request payload: https://developers.facebook.com/docs/graph-api/webhooks/getting-started#verification-requests 
-Route::get('/webhook', function (Request $request) {
-    /**
-     * UPDATE YOUR VERIFY TOKEN
-     * This will be the Verify Token value when you set up webhook
-     **/
-    $verifyToken = env('VERIFY_TOKEN');
-
-    // Parse params from the webhook verification request
-    $mode = $request->query('hub_mode');
-    $token = $request->query('hub_verify_token');
-    $challenge = $request->query('hub_challenge');
-    
-    // Check if a token and mode were sent
-    if ($mode && $token) {
-        // Check the mode and token sent are correct
-        if ($mode === 'subscribe' && $token === $verifyToken) {
-            // Respond with 200 OK and challenge token from the request
-            info('WEBHOOK_VERIFIED');
-            return response($challenge, 200);
-        } else {
-            // Responds with '403 Forbidden' if verify tokens do not match
-            return response()->json(['error' => 'Forbidden'], 403);
-        }
-    }
-});
+Route::get('/messanger', [App\Http\Controllers\MessangerController::class, 'messanger']);
 
 
 Route::get('/', function () {
