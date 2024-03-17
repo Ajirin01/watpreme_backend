@@ -19,7 +19,7 @@ class WebhookController extends Controller
             'cluster' => env('PUSHER_APP_CLUSTER'),
             'useTLS' => true
         ]);
-        $pusher->trigger('whatsapp-events', 'message-received', ['message' => $body['entry']]);
+        $pusher->trigger('whatsapp-events', 'message-received', ['message' => $body['entry'][0]['changes'][0]['value']]);
     }
 
     public function webhookGet(Request $request) {
