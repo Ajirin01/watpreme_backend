@@ -34,6 +34,9 @@ Route::get('/webhook_log', function(){
 
 Route::get('/messanger', [App\Http\Controllers\MessangerController::class, 'messanger']);
 
+Route::get('/facebook', function(){
+    return view('facebook');
+});
 
 Route::get('/', function () {
     return view('welcome');

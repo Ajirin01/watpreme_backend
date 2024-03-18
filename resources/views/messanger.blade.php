@@ -1,178 +1,10 @@
 <!DOCTYPE html>
 <head>
-  <title>Messanger Test</title>
+    <title>Messanger Test</title>
 
-<style>
-    #app {
-        height: 300px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    .row {
-        height: 100%;
-    }
-
-    .col {
-        overflow-y: hidden;
-        margin: 0 auto;
-    }
-
-    /* Style the chat messages */
-    .message-container {
-        flex-grow: 1;
-        overflow-y: auto;
-        scrollbar-width: 4px;  /* Firefox */
-        -ms-overflow-style: none;  /* Internet Explorer 11 */
-    }
-
-    .message-container::-webkit-scrollbar {
-        width: 4px;  /* Set the width of the scrollbar */
-    }
-
-    .message-container::-webkit-scrollbar-thumb {
-        background-color: #888;  /* Color of the scrollbar thumb */
-        border-radius: 4px;  /* Round corners of the thumb */
-    }
-
-
-    .user-message {
-        background-color: #dcf8c6;
-        border-radius: 12px;
-        padding: 8px;
-        max-width: 70%;
-        align-self: flex-end;
-        margin-left: 30%;
-        margin-bottom: 10px; /* Adjust as needed */
-    }
-
-    .bot-message {
-        background-color: #fff;
-        border-radius: 12px;
-        padding: 8px;
-        max-width: 70%;
-        align-self: flex-start;
-        margin-right: 30%;
-        margin-bottom: 10px; /* Adjust as needed */
-    }
-
-    .inputArea {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background-color: #fff;
-        padding: 10px;
-        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .message-display {
-    flex-grow: 1;
-    height: 250px;
-    }
-
-    .user-text {
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-end; /* Align user text to the right */
-        margin-right: 25px;
-        margin-bottom: 10px
-    }
-
-    .user-text-content {
-        /* white-space: pre-wrap; */
-        word-wrap: break-word;
-        background-color: #dcf8c6; /* Background color for bot messages */
-        border-radius: 12px 0px 12px 12px;
-        padding: 8px;
-        min-width: 50px;
-        max-width: 250px;
-        position: relative;
-    }
-
-    .bot-text-content {
-    /* white-space: pre-wrap; */
-        min-width: 50px;
-        max-width: 250px;
-        word-wrap: break-word;
-        margin-left: 10px;
-        background-color: #e0e0e0; /* Background color for user messages */
-        border-radius: 0px 12px 12px 12px;
-        padding: 8px;
-        position: relative; /* Set position relative for positioning the shootout */
-    }
-
-    .receiver-shoot-out {
-    position: absolute;
-    top: 0px;
-    left: -5px; /* Adjust the distance from the right side */
-    width: 10px;
-    height: 15px;
-    border-radius: 0 0 0 10px; /* Adjust border-radius as needed */
-    background-color: #e0e0e0; /* Color of the shootout */
-    }
-
-    .sender-shoot-out {
-    position: absolute;
-    top: 0px;
-    right: -6px; /* Adjust the distance from the right side */
-    width: 10px;
-    height: 15px;
-    border-radius: 0 0 10px 0px; /* Adjust border-radius as needed */
-    background-color: #dcf8c6; /* Color of the shootout */
-    }
-
-    .user-icon {
-    margin-top: 5px;
-    }
-
-    .bot-text {
-        display: flex;
-        flex-direction: row;
-        justify-content: left;
-        justify-self: left;
-        margin-bottom: 10px
-    }
-
-    .chat-input{
-        top: 500px;
-        display: flex;
-        justify-content: flex-start;
-    }
-
-    .input-field{
-        width: 100%;
-    }
-
-    textarea {
-        width: 100%;
-        background-color: white !important;
-        color: rgb(28, 24, 24);
-        border: 1px gray solid;
-        border-radius: 50px !important;
-        padding-left: 10px !important; /* Adjust the value as needed */
-        padding-bottom: 5px
-    }
-
-
-    .send{
-        margin-left: 20px;
-        transition: .2s ease-in;
-        cursor: pointer;
-        padding: 13px 10px 0px 15px;
-        text-align: center;
-        border-radius: 50%;
-        margin-bottom: 2px;
-    }
-
-    .send:hover{
-        opacity: .7;
-    }
-
-    .materialize-textarea{
-        max-height: 100px;
-    }
-</style>
+    <link rel="stylesheet" href="{{ asset('styles.css') }}">
 
 </head>
 <body>
@@ -204,52 +36,127 @@
   <script>
     var messages = [];
 
-document.getElementById("sendButton").addEventListener("click", function() {
-  sendMessage();
-});
+    document.getElementById("sendButton").addEventListener("click", function() {
+        sendMessage();
+    });
 
-document.getElementById("userInput").addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault(); // Prevent default behavior of Enter key
-    sendMessage();
-  }
-});
-
-function sendMessage() {
-  var userInput = document.getElementById("userInput").value.trim();
-  if (userInput !== "") {
-    messages.push({ id: 'user', text: userInput }); // Assuming 'user' as message sender
-    displayMessages();
-    document.getElementById("userInput").value = "";
-  }
-}
-
-function displayMessages() {
-  var messageContainer = document.getElementById("message-container");
-  messageContainer.innerHTML = ""; // Clear previous messages
-  messages.forEach(function(message) {
-    var messageElement = document.createElement("div");
-    messageElement.classList.add("message-text");
-    if (message.id === 'user') {
-      messageElement.classList.add("user-text");
-      messageElement.innerHTML = `
-        <div class="user-text-content">
-          <span class="sender-shoot-out"></span>
-          ${message.text}
-        </div>
-      `;
-    } else {
-      messageElement.classList.add("bot-text");
-      messageElement.innerHTML = `
-        <div class="bot-text-content">
-          <span class="receiver-shoot-out"></span>
-          ${message.text}
-        </div>
-      `;
+    document.getElementById("userInput").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); // Prevent default behavior of Enter key
+        sendMessage();
     }
-    messageContainer.appendChild(messageElement);
-  });
-}
+    });
+
+    function generateUniqueId() {
+        const timestamp = Date.now().toString(36); // Convert timestamp to base36 string
+        const randomString = Math.random().toString(36).substring(2, 7); // Generate random string
+        return timestamp + '-' + randomString; // Concatenate timestamp and random string
+    }
+
+    function convertTimestampToTime(timestamp) {
+        // Create a new Date object with the timestamp (in milliseconds)
+        var date = new Date(timestamp * 1000);
+
+        // Extract hours and minutes from the date object
+        var hours = date.getHours();
+        var minutes = ('0' + date.getMinutes()).slice(-2); // Pad minutes with leading zeros if needed
+
+        // Convert hours to 12-hour format
+        var meridian = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // If hours is 0, set it to 12
+
+        // Construct the time string
+        var timeString = hours + ':' + minutes + ' ' + meridian;
+
+        return timeString;
+    }
+
+    function sendMessage() {
+        var userInput = document.getElementById("userInput").value.trim();
+        const uniqueId = generateUniqueId()
+        if (userInput !== "") {
+            var message = { id: 'user', text: userInput, textId: uniqueId, status: 'sending', timestamp: Date.now() }; // Assuming 'user' as message sender and setting initial status to 'sending'
+
+            // Update UI to show sending status
+            messages.push(message);
+            displayMessages();
+
+            fetch('{{url('')}}/api/send-message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(message),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // Handle successful response
+                console.log('Message sent successfully');
+                // Update status to 'sent' when API request returns success
+                message.status = 'sent';
+                displayMessages();
+                response.json().then(res => {
+                    console.log(res)
+                })
+            })
+            .catch(error => {
+                // Handle error
+                console.error('There was a problem sending the message:', error);
+                // Update status to 'failed' in case of error
+                message.status = 'failed';
+                displayMessages();
+            });
+
+            // Clear input field
+            document.getElementById("userInput").value = "";
+        }
+    }
+
+    function displayMessages() {
+        var messageContainer = document.getElementById("message-container");
+        messageContainer.innerHTML = ""; // Clear previous messages
+        messages.forEach(function(message) {
+            var messageElement = document.createElement("div");
+            messageElement.classList.add("message-text");
+            if (message.id === 'user') {
+                messageElement.classList.add("user-text");
+                messageElement.innerHTML = `
+                    <div class="user-text-content">
+                        <span class="sender-shoot-out"></span>
+                        ${message.text}
+                        <div class="status-indicator" style="display: flex; justify-content: flex-end; padding-left: 50px; font-size: .5rem; opacity: .7 "><span style="padding-right: 5px"> ${convertTimestampToTime(message.timestamp)} </span> ${getStatusIndicator(message.status)}</div>
+                    </div>
+                `;
+            } else {
+                messageElement.classList.add("bot-text");
+                messageElement.innerHTML = `
+                    <div class="bot-text-content">
+                        <span class="receiver-shoot-out"></span>
+                        ${message.text}
+                        <div class="status-indicator" style="display: flex; justify-content: flex-end; margin-left: 50px; font-size: .5rem; opacity: .7 ">${convertTimestampToTime(message.timestamp)}</div>
+                    </div>
+                `;
+            }
+            messageContainer.appendChild(messageElement);
+        });
+    }
+
+    // Helper function to get status indicator text based on message status
+    function getStatusIndicator(status) {
+        switch (status) {
+            case 'sending':
+                return '<i class="material-icons" style="font-size: .7rem">schedule</i>'; // Clock icon for sending
+            case 'sent':
+                return '<i class="material-icons" style="font-size: .7rem">done_all</i>'; // Check (tick) icon for sent
+            case 'failed':
+                return '<i class="material-icons" style="color: red; font-size: .7rem">error</i>'; // Red circled exclamation mark for failed
+            default:
+                return '';
+        }
+    }
 
     // Enable pusher logging - don't include this in production
     Pusher.logToConsole = true;
@@ -261,15 +168,12 @@ function displayMessages() {
 
     var channel = pusher.subscribe('whatsapp-events');
     channel.bind('message-received', function(data) {
-        // if(data.message.messages){
-        //     if(messages[0].from === '2347036998003'){
-        //         messages.push({ id: 'bot', text: data.message.messages[0].text.body }); // Assuming 'bot' as message sender
-        //         displayMessages();
-        //     }
-        // }else if(data.message.metadata.display_phone_number === '15551029236'){
-        //     // messages.push({ id: 'user', text: data.message.messages[0].text.body }); // Assuming 'user' as message sender
-        //     // displayMessages();
-        // }
+        if(data.message.messages){
+            if(data.message.messages[0].from === '2347036998003'){
+                messages.push({ id: 'bot', text: data.message.messages[0].text.body, timestamp: data.message?.messages[0].timestamp }); // Assuming 'bot' as message sender
+                displayMessages();
+            }
+        }
         
 
         console.log(data)
