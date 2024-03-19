@@ -10,9 +10,6 @@
       <p id="profile"></p>
 
       <script>
-  
-        <!-- Add the Facebook SDK for Javascript -->
-  
         (function(d, s, id){
                               var js, fjs = d.getElementsByTagName(s)[0];
                               if (d.getElementById(id)) {return;}
@@ -30,7 +27,6 @@
                       xfbml            : true,
                       version          : 'v18.0'
                     });
-            <!-- If you are logged in, automatically get your name and email adress, your public profile information -->
             FB.login(function(response) {
                       if (response.authResponse) {
                            console.log('Welcome!  Fetching your information.... ');
@@ -38,7 +34,6 @@
                                document.getElementById("profile").innerHTML = "Good to see you, " + response.name + ". i see your email address is " + response.email
                            });
                       } else { 
-                           <!-- If you are not logged in, the login dialog will open for you to login asking for permission to get your public profile and email -->
                            console.log('User cancelled login or did not fully authorize.'); }
             });
         };
