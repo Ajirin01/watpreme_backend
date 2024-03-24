@@ -49,6 +49,17 @@ Route::get('/add-to-queue', function(){
     return "Job added to the queue!";
 });
 
+Route::get('/cron-test', function () {
+    // Trigger Pusher event
+    $pusher = new Pusher(env('PUSHER_APP_KEY'), env('PUSHER_APP_SECRET'), env('PUSHER_APP_ID'), [
+        'cluster' => env('PUSHER_APP_CLUSTER'),
+        'useTLS' => true
+    ]);
+    $pusher->trigger('whatsapp-events', 'message-received', ['message' => 'crons job echoed']);
+    
+    // App\Models\WebhookData::create(['data'=> json_encode(["text"=> "Testing 1234"])]);
+});
+
 Route::get('/command', function(){
     return view('command');
 });
