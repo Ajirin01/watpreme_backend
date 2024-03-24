@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Pusher\Pusher;
 
+use App\Jobs\ProcessQueueJob;
+
 
 // Route::post('/webhook', [App\Http\Controllers\WebhookController::class, 'webhookPost']);
 
@@ -41,3 +43,16 @@ Route::get('/facebook', function(){
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/add-to-queue', function(){
+    ProcessQueueJob::dispatch();
+    return "Job added to the queue!";
+});
+
+Route::get('/command', function(){
+    return view('command');
+});
+
+Route::post('/run-command', [App\Http\Controllers\CommandController::class, 'run'])->name('run.command');
+
+
