@@ -24,6 +24,8 @@ Route::post('/webhook', function (Request $request) use ($token) {
         'useTLS' => true
     ]);
     $pusher->trigger('whatsapp-events', 'message-received', ['message' => $body['entry'][0]['changes'][0]['value']]);
+
+    App\Models\WebhookData::create(['data'=> $body]);
     
 });
 
@@ -63,6 +65,8 @@ Route::get('/cron-test', function () {
 Route::get('/command', function(){
     return view('command');
 });
+
+Route::get('/messanger-job', [App\Http\Controllers\MessangerController::class, 'sendMessageJob']);
 
 Route::post('/run-command', [App\Http\Controllers\CommandController::class, 'run'])->name('run.command');
 

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Pusher\Pusher;
 
+use App\Models\WebhookData;
+
 
 // $token = "ajirin";
 $token = env('WHATSAPP_TOKEN');
@@ -20,6 +22,8 @@ class WebhookController extends Controller
             'useTLS' => true
         ]);
         $pusher->trigger('whatsapp-events', 'message-received', ['message' => $body['entry'][0]['changes'][0]['value']]);
+
+        WebhookData::create(['data'=> $body]);
     }
 
     public function webhookGet(Request $request) {
