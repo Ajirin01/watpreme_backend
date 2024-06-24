@@ -21,7 +21,7 @@ class MessangerController extends Controller
         $textId = $request->input('textId');
 
         // WhatsApp API endpoint URL
-        $apiUrl = 'https://graph.facebook.com/v18.0/162047617002931/messages';
+        $apiUrl = env('WHATSAPP_API_BASE_URL_Phone').'messages';
 
         // Prepare message data
         $postData = [

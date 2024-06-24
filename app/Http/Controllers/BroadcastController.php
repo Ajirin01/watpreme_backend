@@ -20,15 +20,15 @@ class BroadcastController extends Controller
     
     public function store(Request $request)
     {
+        // return response()->json($request->all());
         try {
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
                 'business_id' => 'required|integer',
-                'template_id' => 'required|integer',
+                'template' => 'required',
                 'channel' => 'required|string|max:255',
-                'status' => 'required|string|max:255',
                 'recipients' => 'required|array',
-                'sent_date' => 'nullable|date',
+                'posting_time' => 'nullable|date',
                 'is_scheduled' => 'required|boolean'
             ]);
 
@@ -39,11 +39,10 @@ class BroadcastController extends Controller
             $broadcast = Broadcast::create([
                 'name' => $request->input('name'),
                 'business_id' => $request->input('business_id'),
-                'template_id' => $request->input('template_id'),
+                'template' => $request->input('template'),
                 'channel' => $request->input('channel'),
-                'status' => $request->input('status'),
                 'recipients' => json_encode($request->input('recipients')),
-                'sent_date' => $request->input('sent_date'),
+                'posting_time' => $request->input('posting_time'),
                 'is_scheduled' => $request->input('is_scheduled')
             ]);
 

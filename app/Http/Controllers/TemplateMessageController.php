@@ -277,7 +277,7 @@ class TemplateMessageController extends Controller
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . env('WHATSAPP_API_TOKEN'),
             'Content-Type' => 'application/json',
-        ])->post('https://graph.facebook.com/v18.0/218912241301976/message_templates', $templateData);
+        ])->post(env('WHATSAPP_API_BASE_URL_Business').'message_templates', $templateData);
         
         // Check if the request was successful
         if ($response->successful()) {
@@ -351,7 +351,7 @@ class TemplateMessageController extends Controller
     private function fetchWhatsappTemplates()
     {
         // WhatsApp API endpoint URL
-        $apiUrl = 'https://graph.facebook.com/v18.0/218912241301976/message_templates';
+        $apiUrl = env('WHATSAPP_API_BASE_URL_Business').'message_templates';
 
         // Send GET request to the WhatsApp API endpoint with authorization header
         $response = Http::withHeaders([
@@ -370,7 +370,7 @@ class TemplateMessageController extends Controller
 
     private function getWhatsappTemplateByName($name){
         // WhatsApp API endpoint URL
-        $apiUrl = 'https://graph.facebook.com/v18.0/218912241301976/message_templates?name='.$name;
+        $apiUrl = env('WHATSAPP_API_BASE_URL_Business').'message_templates?name='.$name;
 
         // Send GET request to the WhatsApp API endpoint with authorization header
         $response = Http::withHeaders([
@@ -402,6 +402,7 @@ class TemplateMessageController extends Controller
                 // Update the status of the server template
                 $serverTemplate->status = $whatsappTemplate['status'];
                 $serverTemplate->components = $whatsappTemplate['components'];
+                $serverTemplate->uploaded = true;
                 $serverTemplate->save();
             } else {
                 // Create a new template entry

@@ -29,7 +29,8 @@ class AuthenticationController extends Controller
                             'email'=> $request->input(key: 'email'),
                             // 'phone'=> $request->input(key: 'phone'),
                             'role'=> $request->input(key: 'role'),
-                            'password'=> Hash::make($request->input(key: 'password'))
+                            'password'=> Hash::make($request->input(key: 'password')),
+                            'business_id'=> $request->input(key: 'business_id'),
                             ]);
                             
 

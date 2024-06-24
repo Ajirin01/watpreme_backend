@@ -17,6 +17,7 @@ use App\Http\Controllers\MediaUploadController;
 use App\Http\Controllers\GeneralSettingController;
 use App\Http\Controllers\BusinessProfileController;
 use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\BroadcastMetricsController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -70,6 +71,9 @@ Route::post('query-teams', [TeamController::class, 'queryTeams']);
 
 Route::apiResource('operators', OperatorController::class);
 Route::post('query-operators', [OperatorController::class, 'queryOperators']);
+
+Route::get('broadcast/{id}/metrics', [BroadcastMetricsController::class, 'getMetrics']);
+Route::post('webhook/broadcast', [BroadcastMetricsController::class, 'storeWebhookData']);
 
 
 

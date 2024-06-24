@@ -10,6 +10,10 @@ class Broadcast extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'business_id', 'template_id', 'channel', 'status', 'recipients', 'sent_date', 'is_scheduled', 'posting_time'
+        'name', 'business_id', 'template', 'channel', 'status', 'recipients', 'sent_date', 'is_scheduled', 'posting_time'
+    ];
+
+    protected $casts = [
+        'template'=> 'json'
     ];
 }

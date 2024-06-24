@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('business_id')->constrained()->onDelete('cascade');
             $table->string('name'); // Changed from 'title' to 'name'
-            $table->foreignId('template_id')->constrained()->onDelete('cascade');
+            $table->json('template');
             $table->string('channel'); // Added 'channel' field
             $table->string('status')->default('pending');
             $table->json('recipients'); // Changed from 'contacts' to 'recipients'
