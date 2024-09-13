@@ -18,6 +18,7 @@ class AuthenticationController extends Controller
 {
     public function user(){
         return Auth::user();
+        // return User::all();
     }
 
     public function all(){

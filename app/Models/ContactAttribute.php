@@ -13,6 +13,10 @@ class ContactAttribute extends Model
         'value', 'custom_attribute_id', 'contact_id'
     ];
 
+    protected $with = [
+        'customAttribute'
+    ];
+
     public function customAttribute()
     {
         return $this->belongsTo(CustomAttribute::class);

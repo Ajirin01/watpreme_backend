@@ -13,6 +13,10 @@ class Contact extends Model
         'name', 'phone', 'status', 'broadcast', 'sms'
     ];
 
+    protected $with = [
+        'attributes'
+    ];
+
     public function attributes()
     {
         return $this->hasMany(ContactAttribute::class);
@@ -29,5 +33,9 @@ class Contact extends Model
         });
     }
 
+    public function conversations()
+    {
+        return $this->hasMany(Conversation::class);
+    }
 
 }

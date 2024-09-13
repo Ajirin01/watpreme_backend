@@ -37,4 +37,9 @@ class Business extends Model
     {
         return $this->hasMany('App\Models\User')->where('role', 'business_admin');
     }
+
+    public function getAdminUserById($adminUserId)
+    {
+        return $this->businessAdminUsers()->where('id', $adminUserId)->first();
+    }
 }
